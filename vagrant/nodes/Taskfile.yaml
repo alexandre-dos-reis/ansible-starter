@@ -1,0 +1,33 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  NODES_DIR: vagrant/nodes
+
+tasks:
+
+  up:
+    cmds:
+      - (cd {{.NODES_DIR}}; vagrant up)
+
+  test:
+    cmds:
+      - ansible test -m ping --ask-pass
+
+  provision:
+    cmds:
+      - (cd {{.NODES_DIR}}; vagrant provision)
+  
+  remove:keys:
+    cmds:
+      - ansible-playbook utilities/remove_test_hosts_from_localhost.yml
+
+  destroy:
+    cmds:
+      - (cd {{.NODES_DIR}}; vagrant destroy -f)
+
+  delete:
+    cmds:
+      - task: remove:keys
+      - task: destroy

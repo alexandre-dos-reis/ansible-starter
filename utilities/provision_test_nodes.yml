@@ -1,0 +1,16 @@
+---
+- name: Provision nodes
+  hosts: test
+  remote_user: vagrant
+  tasks:
+    - name: Allow ssh connection with password
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        state: present
+        regexp: "^PasswordAuthentication"
+        line: "PasswordAuthentication yes"
+
+    - name: Restart ssh server
+      service:
+        name: ssh
+        state: restarted

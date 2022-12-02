@@ -1,0 +1,49 @@
+# encoding: utf-8
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+### https://stackoverflow.com/questions/16708917/how-do-i-include-variables-in-my-vagrantfile
+
+require 'yaml'
+
+inventory_dir = File.dirname(File.expand_path("../."))
+inventory = YAML.load_file("#{inventory_dir}/inventory.yml")
+test_hosts = inventory['all']['children']['test']['hosts']
+
+Vagrant.configure("2") do |config|
+  test_hosts.each do |hostname, value|
+    config.vm.define hostname do |node|
+      
+      node.vm.box = "debian/bullseye64"
+      node.vm.provider "virtualbox" do |vb|
+        vb.memory = "1024"
+      end
+      
+      node.vm.hostname = "#{hostname}"
+      node.vm.network "public_network", 
+        ip: "#{value['ansible_host']}",
+        netmask: 16, 
+        bridge: ["en0: Wi-Fi (AirPort)"]
+
+      node.vm.provision "shell", inline: <<-SHELL
+        sed -i 's/^PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+        systemctl reload sshd
+        groupadd -f #{value['provider_user']}
+        useradd -g #{value['provider_user']} \
+          -d /home/#{value['provider_user']} \
+          -s /bin/bash -p $(echo #{value['provider_password']} | openssl passwd -1 -stdin) |
+          #{value['provider_user']}
+      SHELL
+      
+    end
+  end
+end
+
+# node.vm.provision "ansible" do |ansible|
+#   ansible.playbook = "../../utilities/provision_test_nodes.yml"
+#   ansible.become = true
+#   ansible.extra_vars = {
+#     PROVIDER_USER: value['provider_user'],
+#     PROVIDER_PASSWORD: value['provider_password']
+#   }
+# end

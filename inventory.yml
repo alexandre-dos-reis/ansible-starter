@@ -1,0 +1,22 @@
+all:
+  children:
+
+    test:
+      hosts:
+
+        test-build:
+          ansible_host: 172.16.0.11
+          ansible_port: 22
+          provider_user: debian11
+          provider_password: pass11
+
+        test-prod:
+          ansible_host: 172.16.0.12
+          ansible_port: 22
+          provider_user: debian12
+          provider_password: pass12
+      
+    prod:
+      hosts:
+        adr-build:
+        adr-prod:

@@ -1,0 +1,9 @@
+---
+- name: Remove test hosts from localhost ~/.ssh/known_hosts 
+  hosts: localhost
+  connection: local
+  tasks:
+    - loop: "{{ groups['test'] | map('extract', hostvars, ['ansible_host']) }}"
+      known_hosts:
+        state: absent
+        name: "{{ item }}"
