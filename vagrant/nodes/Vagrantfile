@@ -25,25 +25,10 @@ Vagrant.configure("2") do |config|
         netmask: 16, 
         bridge: ["en0: Wi-Fi (AirPort)"]
 
-      node.vm.provision "shell", inline: <<-SHELL
-        sed -i 's/^PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config
-        systemctl reload sshd
-        groupadd -f #{value['provider_user']}
-        useradd -g #{value['provider_user']} \
-          -d /home/#{value['provider_user']} \
-          -s /bin/bash -p $(echo #{value['provider_password']} | openssl passwd -1 -stdin) |
-          #{value['provider_user']}
-      SHELL
+      node.vm.provision "shell",
+        path: "provision.sh",
+        args: [value['provider_user'], value['provider_password']]
       
     end
   end
 end
-
-# node.vm.provision "ansible" do |ansible|
-#   ansible.playbook = "../../utilities/provision_test_nodes.yml"
-#   ansible.become = true
-#   ansible.extra_vars = {
-#     PROVIDER_USER: value['provider_user'],
-#     PROVIDER_PASSWORD: value['provider_password']
-#   }
-# end

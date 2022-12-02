@@ -7,14 +7,14 @@ all:
         test-build:
           ansible_host: 172.16.0.11
           ansible_port: 22
-          provider_user: debian11
-          provider_password: pass11
+          provider_user: debian
+          provider_password: password
 
         test-prod:
           ansible_host: 172.16.0.12
           ansible_port: 22
-          provider_user: debian12
-          provider_password: pass12
+          provider_user: debian
+          provider_password: password
       
     prod:
       hosts:

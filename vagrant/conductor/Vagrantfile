@@ -18,7 +18,8 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "../../.", "/home/vagrant/project_synced_folder"
   
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "../../utilities/provision_conductor.yml"
+    # ansible.playbook = "../../utilities/provision_conductor.yml"
+    # Adapt ansible playbook to shell script
   end
 
 end
