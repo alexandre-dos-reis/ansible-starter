@@ -27,7 +27,10 @@ Vagrant.configure("2") do |config|
 
       node.vm.provision "shell",
         path: "provision.sh",
-        args: [value['provider_user'], value['provider_password']]
+        args: [
+          value['provider_user'], 
+          value['provider_password']
+        ]
       
     end
   end

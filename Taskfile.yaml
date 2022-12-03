@@ -7,3 +7,27 @@ silent: true
 includes:
   nodes: ./vagrant/nodes
   conductor: ./vagrant/conductor
+
+tasks:
+
+  install:
+    cmds:
+      # https://github.com/joshmcarthur/vagrant-list
+      - vagrant plugin install vagrant-list 
+
+  list:
+    desc: List all the VMs initialized by Vagrant 
+    cmds:
+      - vagrant list
+
+  up:
+    deps: [nodes:up, conductor:up]
+
+  destroy:
+    deps: [nodes:destroy, conductor:destroy]
+
+  cleanup:
+    cmds:
+      - rm -Rf ./vagrant/conductor/.vagrant
+      - rm -Rf ./vagrant/nodes/.vagrant
+      - echo '### Cleanup done !'

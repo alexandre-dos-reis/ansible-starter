@@ -1,3 +1,6 @@
+ansible_public_key = "id_ed25519.pub"
+ansible_private_key = "id_ed25519"
+
 Vagrant.configure("2") do |config|
   config.ssh.forward_agent = true
 
@@ -16,10 +19,10 @@ Vagrant.configure("2") do |config|
   end 
   
   config.vm.synced_folder "../../.", "/home/vagrant/project_synced_folder"
-  
-  config.vm.provision "ansible" do |ansible|
-    # ansible.playbook = "../../utilities/provision_conductor.yml"
-    # Adapt ansible playbook to shell script
-  end
+
+  config.vm.provision "file", source: "~/.ssh/#{ansible_public_key}", destination: "~/.ssh/#{ansible_public_key}"
+  config.vm.provision "file", source: "~/.ssh/#{ansible_private_key}", destination: "~/.ssh/#{ansible_private_key}"
+  config.vm.provision "file", source: "./.add_to_bashrc", destination: "~/.add_to_bashrc"
+  config.vm.provision "shell", path: "provision.sh"
 
 end
