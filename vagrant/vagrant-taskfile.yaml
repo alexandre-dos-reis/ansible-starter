@@ -1,0 +1,24 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+
+  up:
+    desc: Start the virtual machines declared in the {{.WORKING_DIR}}/Vagrantfile.
+    dir: "{{.WORKING_DIR}}"
+    cmds:
+      - vagrant up
+  
+  provision:
+    desc: Provision the virtual machines declared in the {{.WORKING_DIR}}/Vagrantfile.
+    dir: "{{.WORKING_DIR}}"
+    cmds:
+      - vagrant provision
+
+  destroy:
+    desc: Destroy the virtual machines declared in the {{.WORKING_DIR}}/Vagrantfile.
+    dir: "{{.WORKING_DIR}}"
+    cmds:
+      - vagrant destroy -f
+      - if test "{{.REMOVE_KEYS}}" = true; then ../remove_keys.sh ; fi
