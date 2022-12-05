@@ -1,9 +1,0 @@
-# https://taskfile.dev
-
-version: '3'
-
-tasks:
-
-  prepare:
-    cmds:
-    - ansible-playbook playbooks/00_prepare.yml --ask-pass --ask-become-pass

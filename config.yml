@@ -1,4 +1,6 @@
 ansible_private_key: ~/.ssh/id_ed25519
 ansible_public_key: ~/.ssh/id_ed25519.pub
 
-conductor_ip: 172.16.0.11
+conductor_ip: 172.16.10.11
+netmask: 16
+network_bridge: ["en0: Wi-Fi (AirPort)"]

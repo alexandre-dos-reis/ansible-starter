@@ -1,13 +1,43 @@
 ---
 - name: Prepare the servers for ansible
   hosts: all
+  become: yes
   remote_user: "{{ provider_user }}"
-  tasks:
+  vars: 
+    ansible_password: "{{ provider_password }}"
+    ansible_become_password: "{{ ansible_password }}"
 
+  tasks:
     - name: Remove vagrant user from test machines
-      become: yes 
       user:
         name: vagrant
         state: absent
         remove: yes
       when: groups['test'] is defined and inventory_hostname in groups['test']
+
+    - name: Change root password
+      user:
+        name: root
+        password: "{{ root_password | password_hash('sha512') }}"
+
+    - name: Group creation for "{{ ansible_remote_user }}"
+      group:
+        name: "{{ ansible_remote_user }}"
+        state: present
+
+    - name: Creation of user "{{ ansible_remote_user }}"
+      user:
+        name: "{{ ansible_remote_user }}"
+        password: "{{ ansible_remote_password | password_hash('sha512') }}"
+        group: "{{ ansible_user }}"
+        groups: 
+          - "{{ ansible_remote_user }}"
+          - sudo
+        shell: /bin/bash
+        state: present
+
+    - name: Add public key to 'authorized_key' for "{{ ansible_remote_user }}" in remote hosts
+      authorized_key:
+        user: "{{ ansible_remote_user }}"
+        key: "{{ lookup('file', '~/.ssh/ansible.pub') }}"
+        state: present

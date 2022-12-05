@@ -10,9 +10,6 @@ vars:
 
 includes:
 
-  ansible:
-    taskfile: ./taskfiles/ansible.yml
-
   conductor:
     taskfile: ./vagrant/vagrant-taskfile.yaml
     vars:
@@ -25,7 +22,6 @@ includes:
       WORKING_DIR: "{{.NODES_DIR}}"
       REMOVE_KEYS: true
 
-
 tasks:
 
   default:
@@ -36,7 +32,8 @@ tasks:
     desc: Install all the dependencies needed for running the project.
     cmds:
       - vagrant plugin install vagrant-list  # https://github.com/joshmcarthur/vagrant-list
-      - vagrant plugin install inifile # https://rubygems.org/gems/inifile
+      # - vagrant plugin install inifile # https://rubygems.org/gems/inifile
+      # - vagrant plugin install vagrant-reload # https://github.com/aidanns/vagrant-reload/blob/master/README.md
 
   list:
     desc: List all the VMs initialized by Vagrant.
@@ -68,3 +65,9 @@ tasks:
     dir: "{{.CONDUCTOR_DIR}}"
     cmds:
       - vagrant ssh
+
+  ansible:prepare:
+    dir: "{{.CONDUCTOR_DIR}}"
+    cmds:
+    # https://stackoverflow.com/questions/41728722/vagrant-ssh-with-multiple-arguments
+    - vagrant ssh -- -t 'cd synced_folder; ansible-playbook playbooks/00_prepare.yml'

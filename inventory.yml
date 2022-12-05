@@ -5,16 +5,16 @@ all:
       hosts:
 
         test-build:
-          ansible_host: 172.16.0.11
+          ansible_host: 172.16.10.21
           ansible_port: 22
           provider_user: debian
-          provider_password: password
+          provider_password: password11
 
         test-app:
-          ansible_host: 172.16.0.12
+          ansible_host: 172.16.10.22
           ansible_port: 22
           provider_user: debian
-          provider_password: password
+          provider_password: password12
       
     prod:
       hosts:

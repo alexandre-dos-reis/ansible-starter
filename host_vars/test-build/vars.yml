@@ -1,0 +1,7 @@
+root_password: "root"
+
+# provider_user: debian
+# provider_password: ansible
+
+ansible_remote_user: ansible
+ansible_remote_password: password-test-build

@@ -1,0 +1,12 @@
+---
+- name: Test that the user {{ ansible_user }} can connect to nodes without password.
+  hosts: all
+  become: yes
+  remote_user: "{{ ansible_remote_user }}"
+  vars:
+    ansible_become_password: "{{ ansible_remote_password }}"
+
+  tasks:
+    - name: Debug
+      debug:
+        msg: Connected with user {{ ansible_remote_user }}
