@@ -10,7 +10,7 @@ all:
           provider_user: debian
           provider_password: password
 
-        test-prod:
+        test-app:
           ansible_host: 172.16.0.12
           ansible_port: 22
           provider_user: debian
@@ -19,4 +19,14 @@ all:
     prod:
       hosts:
         adr-build:
-        adr-prod:
+        adr-app:
+
+    app:
+      hosts:
+        test-app:
+        adr-app:
+    
+    build:
+      hosts:
+        test-build:
+        adr-build:

@@ -6,8 +6,8 @@
 
 require 'yaml'
 
-inventory_dir = File.dirname(File.expand_path("../."))
-inventory = YAML.load_file("#{inventory_dir}/inventory.yml")
+root_dir = File.dirname(File.expand_path("../."))
+inventory = YAML.load_file("#{root_dir}/inventory.yml")
 test_hosts = inventory['all']['children']['test']['hosts']
 
 Vagrant.configure("2") do |config|

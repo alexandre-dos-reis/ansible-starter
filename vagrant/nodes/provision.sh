@@ -9,6 +9,7 @@ groupadd -f $1
 useradd \
     --create-home \
     --gid $1 \
+    --groups sudo \
     --shell /bin/bash \
     --password $(echo $2 | openssl passwd -1 -stdin) \
     $1

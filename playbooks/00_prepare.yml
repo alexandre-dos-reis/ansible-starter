@@ -1,0 +1,13 @@
+---
+- name: Prepare the servers for ansible
+  hosts: all
+  remote_user: "{{ provider_user }}"
+  tasks:
+
+    - name: Remove vagrant user from test machines
+      become: yes 
+      user:
+        name: vagrant
+        state: absent
+        remove: yes
+      when: groups['test'] is defined and inventory_hostname in groups['test']

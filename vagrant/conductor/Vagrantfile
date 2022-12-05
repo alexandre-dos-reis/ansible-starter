@@ -1,11 +1,17 @@
-ansible_public_key = "id_ed25519.pub"
-ansible_private_key = "id_ed25519"
+# encoding: utf-8
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require 'yaml'
+
+root_dir = File.dirname(File.expand_path("../."))
+config = YAML.load_file("#{root_dir}/config.yml")
+ansible_private_key = config['ansible_private_key']
+ansible_public_key = config['ansible_public_key']
 
 Vagrant.configure("2") do |config|
-  config.ssh.forward_agent = true
 
   config.vm.box = "debian/bullseye64"
-
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
   end
@@ -18,11 +24,21 @@ Vagrant.configure("2") do |config|
       bridge: ["en0: Wi-Fi (AirPort)"]
   end 
   
-  config.vm.synced_folder "../../.", "/home/vagrant/project_synced_folder"
-
-  config.vm.provision "file", source: "~/.ssh/#{ansible_public_key}", destination: "~/.ssh/#{ansible_public_key}"
-  config.vm.provision "file", source: "~/.ssh/#{ansible_private_key}", destination: "~/.ssh/#{ansible_private_key}"
-  config.vm.provision "file", source: "./.add_to_bashrc", destination: "~/.add_to_bashrc"
+  config.vm.synced_folder "../../.", "/home/ansible/synced_folder"
+  
   config.vm.provision "shell", path: "provision.sh"
+
+  config.vm.provision "file", 
+    source: "./.add_to_bashrc", 
+    destination: "/home/ansible/.add_to_bashrc"
+  
+  config.vm.provision "file", 
+    source: ansible_public_key, 
+    destination: "/home/ansible/.ssh/ansible.pub"
+  
+  config.vm.provision "file", 
+    source: ansible_private_key, 
+    destination: "/home/ansible/.ssh/ansible"
+
 
 end

@@ -4,18 +4,25 @@ version: '3'
 
 silent: true
 
+vars:
+  CONDUCTOR_DIR: ./vagrant/conductor
+  NODES_DIR: ./vagrant/nodes
+
 includes:
+
+  ansible:
+    taskfile: ./taskfiles/ansible.yml
 
   conductor:
     taskfile: ./vagrant/vagrant-taskfile.yaml
     vars:
-      WORKING_DIR: ./vagrant/conductor
+      WORKING_DIR: "{{.CONDUCTOR_DIR}}"
       REMOVE_KEYS: false
 
   nodes:
     taskfile: ./vagrant/vagrant-taskfile.yaml
     vars:
-      WORKING_DIR: vagrant/nodes
+      WORKING_DIR: "{{.NODES_DIR}}"
       REMOVE_KEYS: true
 
 
@@ -25,10 +32,11 @@ tasks:
     cmds:
       - task --list
 
-  install:
+  install:deps:
     desc: Install all the dependencies needed for running the project.
     cmds:
       - vagrant plugin install vagrant-list  # https://github.com/joshmcarthur/vagrant-list
+      - vagrant plugin install inifile # https://rubygems.org/gems/inifile
 
   list:
     desc: List all the VMs initialized by Vagrant.
@@ -55,3 +63,8 @@ tasks:
       - rm -Rf ./vagrant/nodes/.vagrant
       - echo ''
       - echo '### Cleanup done !'
+
+  conductor:ssh:
+    dir: "{{.CONDUCTOR_DIR}}"
+    cmds:
+      - vagrant ssh
