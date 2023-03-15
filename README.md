@@ -1,4 +1,4 @@
-# servers-infra
+# ansible-starter
 
 An ansible project for installing and managing my servers. It provides a simple and easy way to reproduce servers given by a provider like OVH.
 
