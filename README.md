@@ -57,6 +57,11 @@ For others availables commands, just write (outside of the VM):
 
 `task`
 
+## Todos
+
+- Reorganize servers name to express reality
+- Reorganize `inventory.yml` to add more server to test group using `test-*` whatever name and find a way to retrieve the info in Vagrant.
+
 ## Documents
 
 - [recette docker ultransible](https://github.com/ultransible/docker)
