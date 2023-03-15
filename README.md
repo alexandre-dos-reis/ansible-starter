@@ -61,6 +61,7 @@ For others availables commands, just write (outside of the VM):
 
 - Reorganize servers name to express reality
 - Reorganize `inventory.yml` to add more server to test group using `test-*` whatever name and find a way to retrieve the info in Vagrant.
+- Integrate with the ansible galaxy ecosystem with `requirements.yml` file.
 
 ## Documents
 
